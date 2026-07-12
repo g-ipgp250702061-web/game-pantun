@@ -1,0 +1,113 @@
+<!DOCTYPE html><html lang='ms'><head><meta charset='utf-8'>
+<title>Kuiz Pantun Kamera Pintar</title>
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+
+    background-image:url("background.png");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    background-attachment:fixed;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+.card{
+    background: rgba(255,255,255,0.20);
+    backdrop-filter:blur(10px);
+    border: 2px solid rgba(255,255,255,0.35);
+    color:white;
+}h2,h3{
+    color:black;
+}
+
+.pantun{
+    color:black;
+}.top{display:flex;justify-content:space-between}.pantun{background:#eef8ff;border-left:6px solid #2196f3;padding:12px;border-radius:10px;font-size:20px;line-height:1.7}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+button{padding:14px;border:none;border-radius:10px;background:#43a047;color:#fff;font-size:17px;cursor:pointer}
+#pop{display:none;position:fixed;inset:0;background:#0006;align-items:center;justify-content:center}
+.box{background:#fff;padding:20px;border-radius:14px;text-align:center;width:380px}
+#startScreen{position:fixed;inset:0;display:flex;justify-content:center;align-items:center;background:rgba(0,0,0,.4);z-index:999}
+.startBox{background:rgba(255,255,255,.25);backdrop-filter:blur(12px);padding:30px;border-radius:20px;color:white;text-align:center}
+#mulaBtn{padding:15px 30px;font-size:22px;border:none;border-radius:30px;background:#00c853;color:#fff}
+</style></head><body>
+    <!-- ================= MENU PERMULAAN ================= -->
+
+<div id="startScreen">
+
+    <div class="startBox">
+
+        <h1>📷 MISI KAMERA PINTAR</h1>
+
+        <h2>🏡 Pengembaraan Keselamatan</h2>
+
+        <p>
+            Selamat datang!
+            <br><br>
+            Bantu Amir menjawab pantun
+            untuk mencari
+            <b>Harta Karun Keselamatan.</b>
+        </p>
+
+        <button id="mulaBtn" onclick="mulaGame()">
+            ▶ MULA PERMAINAN
+        </button>
+
+    </div>
+
+</div>
+<div class='card' id="game" style="display:none;">
+<div class='top'><h2>📷 Kuiz Pantun Kamera Pintar</h2><h3>⭐ <span id='score'>0</span>/40</h3></div>
+<h3 id='step'></h3>
+<div class='pantun' id='pantun'></div>
+<h3 id='soalan'></h3>
+<div class='grid' id='pilihan'></div>
+</div>
+<div id='pop'><div class='box'><h2 id='tajuk'></h2><p id='mesej'></p><button onclick='nextQ()'>Teruskan</button></div></div>
+<script>
+const q=[
+{p:`Buah lontar masak berisi,<br>Dari Rantau tanam di laman;<br><b style="color:#0b84d8">Kamera pintar alatan inovasi,<br>Untuk memantau sekitar kediaman.</b>`,
+s:"Apakah kegunaan kamera pintar berdasarkan pantun pertama?",
+a:["A. Untuk menghias rumah","B. Untuk membantu memantau sekitar kediaman","C. Untuk memasak makanan","D. Untuk bermain permainan"],c:1},
+{p:`Pergi ke pekan mencari celagi,<br>Di dalam raga ikan gelama;<br><b style="color:#0b84d8">Usah fikirkan harga yang tinggi,<br>Keselamatan keluarga lebih utama.</b>`,
+s:"Apakah pengajaran daripada pantun kedua?",
+a:["A. Pilih barang yang paling murah.","B. Keselamatan keluarga lebih penting daripada harga.","C. Elakkan membeli kamera pintar.","D. Harga lebih penting daripada keselamatan."],c:1},
+{p:`Ke pantai Mersing mencari lokan,<br>Pacu kuda membawa sekam;<br><b style="color:#0b84d8">Boleh berpusing mengikut gerakan,<br>Sentiasa waspada untuk merakam.</b>`,
+s:"Apakah kelebihan kamera pintar yang dinyatakan dalam pantun ketiga?",
+a:["A. Boleh terbang di udara.","B. Boleh mengeluarkan bunyi yang kuat.","C. Boleh berpusing mengikut gerakan untuk merakam.","D. Boleh membuka pintu rumah."],c:2},
+{p:`Dari permatang membawa pulasan,<br>Pulasan dibawa ke hujung jeti;<br><b style="color:#0b84d8">Tetamu datang dapat dikesan,<br>Pencuri didakwa senang dibukti.</b>`,
+s:"Mengapakah kamera pintar penting berdasarkan pantun keempat?",
+a:["A. Untuk menonton filem.","B. Untuk menghias ruang tamu.","C. Untuk mengesan tetamu dan menjadi bukti jika berlaku jenayah.","D. Untuk bermain permainan video."],c:2}
+];
+let i=0,mark=0,ok=false;
+function show(){step.textContent=`Pantun ${i+1} daripada 4`;pantun.innerHTML=q[i].p;soalan.textContent=q[i].s;pilihan.innerHTML="";
+q[i].a.forEach((t,n)=>{let b=document.createElement("button");b.textContent=t;b.onclick=()=>check(n);pilihan.appendChild(b);});}
+function check(n){pop.style.display="flex";if(n==q[i].c){ok=true;mark+=10;score.textContent=mark;tajuk.textContent="🎉 Tahniah!";mesej.textContent="Anda mendapat 10 markah!";}else{ok=false;tajuk.textContent="📖 Cuba lagi!";mesej.textContent="Baca semula pantun dengan teliti.";}}
+function nextQ(){pop.style.display="none";if(!ok)return;i++;if(i<4)show();else document.body.innerHTML=`<div style="display:flex;justify-content:center;align-items:center;height:100vh;font-family:Arial"><div class='box'><h1>🏆 Tahniah!</h1><h2>Markah Akhir: ${mark}/40</h2><button onclick='location.reload()'>Main Semula</button></div></div>`;}
+show();
+
+const bgm = document.getElementById("bgm");
+
+if (bgm) {
+    bgm.volume = 1;
+}
+
+function mulaGame(){
+
+    bmusic.play();
+
+    document.getElementById("startScreen").style.display="none";
+
+    document.getElementById("game").style.display="block";
+
+}
+</script>
+<audio id="bmusic" loop>
+<source src="bmusic.mp3" type="audio/mpeg">
+</audio>
+</body></html>
